@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using PMS_API.Models;
+using System.Security.Cryptography.Xml;
 
 namespace PMS_API.Data
 {
@@ -16,10 +17,12 @@ namespace PMS_API.Data
 
         public static dynamic AddUsers(Users users, string connection)
         {
+            Encryption encrypted= new Encryption();
             using(conn= new SqlConnection(connection))
             {
                 conn.Open();
 
+                string PassEncry = encrypted.Encryting(users.Password_User);
                 SqlCommand cmd = new SqlCommand("insert into Users(Name_User,LastName_User,Email_User,UserName,Password_User,Date_User) " +
                     "values(@name,@lastname,@email,@username,@password,GETDATE())", conn);
 
@@ -27,7 +30,7 @@ namespace PMS_API.Data
                 cmd.Parameters.AddWithValue("@lastname", users.LastName_User);
                 cmd.Parameters.AddWithValue("@email", users.Email_User);
                 cmd.Parameters.AddWithValue("@username", users.UserName);
-                cmd.Parameters.AddWithValue("@password", users.Password_User);
+                cmd.Parameters.AddWithValue("@password", PassEncry);
 
                 cmd.ExecuteNonQuery();
 
