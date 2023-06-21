@@ -21,7 +21,7 @@ namespace PMS_API.Controllers
         [HttpPost]
         public dynamic Login([FromBody] Login login) 
         {
-            return LoginData.SignIn(login, Connection);
+            return LoginData.SignIn(login, Connection,Configuration);
         }
     }
 }

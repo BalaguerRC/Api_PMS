@@ -1,6 +1,10 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using PMS_API.Models;
 using System.Data;
+using System.Security.Claims;
+using System.Text;
 
 namespace PMS_API.Data
 {
@@ -11,9 +15,9 @@ namespace PMS_API.Data
 
         public LoginData(IConfiguration configuration)
         {
-            Configuration=configuration;
+            //Configuration=configuration;
         }
-        public static dynamic SignIn(Login login, string connection)
+        public static dynamic SignIn(Login login, string connection,IConfiguration configuration)
         {
             Encryption encryption = new Encryption();
             using(conn= new SqlConnection(connection))
@@ -44,6 +48,12 @@ namespace PMS_API.Data
 
                     if (descPass == login.Password)
                     {
+                        UserModel model = new UserModel();
+                        model.UserName = login.UserName;
+                        model.Password = login.Password;
+
+                        var token = GenerateToken(users.Email_User, login.UserName, configuration);
+
                         return new
                         {
                             success = true,
@@ -54,7 +64,8 @@ namespace PMS_API.Data
                                 LastName= users.LastName_User,
                                 Email= users.Email_User,
                                 UserName=users.UserName
-                            }
+                            },
+                            token=token
                         };
                     }
                 }
@@ -73,6 +84,32 @@ namespace PMS_API.Data
                     success = false
                 };
             }
+        }
+        public static string GenerateToken(string email,string username, IConfiguration configuration)
+        {
+            string tokenString = "";
+
+            var issuer = configuration["Jwt:Issuer"];
+            var audience = configuration["Jwt:Audience"];
+            var key = configuration["Jwt:Key"];
+
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var claims = new[]
+            {
+                new Claim("Id", Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Name, username),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim("email", email)
+            };
+            var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(10), signingCredentials: credentials);
+            var tokenHandler= new JwtSecurityTokenHandler();
+
+            tokenString = tokenHandler.WriteToken(token);
+
+            return tokenString;
         }
     }
 }
