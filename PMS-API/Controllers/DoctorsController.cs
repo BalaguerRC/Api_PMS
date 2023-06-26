@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMS_API.Data;
 using PMS_API.Models;
@@ -23,6 +24,7 @@ namespace PMS_API.Controllers
         {
             return DoctorsData.AddDoctor(doctors, Connection);
         }
+        [Authorize]
         [HttpGet]
         public dynamic GetDoctors()
         {
