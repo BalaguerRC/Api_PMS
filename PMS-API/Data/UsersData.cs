@@ -39,14 +39,15 @@ namespace PMS_API.Data
                     if (!validate)
                     {
                         string PassEncry = encrypted.Encryting(users.Password_User);
-                        SqlCommand cmd = new SqlCommand("insert into Users(Name_User,LastName_User,Email_User,UserName,Password_User,Date_User) " +
-                            "values(@name,@lastname,@email,@username,@password,GETDATE())", conn);
+                        SqlCommand cmd = new SqlCommand("insert into Users(Name_User,LastName_User,Email_User,UserName,Password_User,Date_User,type_User) " +
+                            "values(@name,@lastname,@email,@username,@password,GETDATE(),@type)", conn);
 
                         cmd.Parameters.AddWithValue("@name", users.Name_User);
                         cmd.Parameters.AddWithValue("@lastname", users.LastName_User);
                         cmd.Parameters.AddWithValue("@email", users.Email_User);
                         cmd.Parameters.AddWithValue("@username", users.UserName);
                         cmd.Parameters.AddWithValue("@password", PassEncry);
+                        cmd.Parameters.AddWithValue("@type", users.Type_User);
 
                         cmd.ExecuteNonQuery();
 
@@ -76,6 +77,8 @@ namespace PMS_API.Data
             }
         }
 
+
+        //edit and getuserbyid
         public static dynamic EditUser(int id, EditUser users,string connection)
         {
             using (conn = new SqlConnection(connection))
@@ -160,6 +163,7 @@ namespace PMS_API.Data
                         UserName= reader.GetString(4),
                         Password_User= reader.GetString(5),
                         Date_User= reader.GetDateTime(6),
+                        Type_User = reader.GetInt32(7),
                     });
                 }
                 reader.Close();

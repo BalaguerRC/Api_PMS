@@ -9,6 +9,7 @@
         public string UserName { get; set; }
         public string Password_User { get; set;}
         public DateTime? Date_User {  get; set; }
+        public int Type_User { get; set; }
     }
     public class EditUser
     {
