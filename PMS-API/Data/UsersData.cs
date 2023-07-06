@@ -187,25 +187,30 @@ namespace PMS_API.Data
                     UserById users = new UserById();
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("select Id_User,Name_User,LastName_User,Email_User,UserName,Date_User from Users where Id_User=@id", conn);
+                    SqlCommand cmd = new SqlCommand("select Id_User,Name_User,LastName_User,Email_User,UserName,type_User,Date_User from Users where Id_User=@id", conn);
                     cmd.Parameters.AddWithValue("@id", id);
 
                     SqlDataReader reader = cmd.ExecuteReader();
+                    
 
-                    if(reader.Read())
+                    if (reader.Read())
                     {
-                        while (reader.Read())
-                        {
-                            users.Id_User = reader.GetInt32(0);
-                            users.Name_User = reader.GetString(1);
-                            users.LastName_User = reader.GetString(2);
-                            users.Email_User = reader.GetString(3);
-                            users.UserName = reader.GetString(4);
-                            users.Date_User = reader.GetDateTime(5);
-                        }
                         reader.Close();
                         reader.Dispose();
-
+                        
+                        SqlDataReader reader2 = cmd.ExecuteReader();
+                        while (reader2.Read())
+                        {
+                            users.Id_User = reader2.GetInt32(0);
+                            users.Name_User = reader2.GetString(1);
+                            users.LastName_User = reader2.GetString(2);
+                            users.Email_User = reader2.GetString(3);
+                            users.UserName = reader2.GetString(4);
+                            users.Type_User= reader2.GetInt32(5);
+                            users.Date_User = reader2.GetDateTime(6);
+                        }
+                        reader2.Close();
+                        reader2.Dispose();
                         conn.Close();
 
                         return new

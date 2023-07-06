@@ -25,6 +25,8 @@
         public string LastName_User { get; set; }
         public string Email_User { get; set; }
         public string UserName { get; set; }
+        public int Type_User { get; set; }
+
         public DateTime? Date_User { get; set; }
     }
 }
