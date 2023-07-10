@@ -81,20 +81,25 @@ namespace PMS_API.Data
         //edit and getuserbyid
         public static dynamic EditUser(int id, EditUser users,string connection)
         {
+            //Encryption encrypted = new Encryption();
             using (conn = new SqlConnection(connection))
             {
                 try
                 {
                     conn.Open();
 
-                    SqlCommand cmd = new SqlCommand("update Users set Name_User=@name,LastName_User=@lastname,Email_User=@email,Password_User=@password " +
+                    SqlCommand cmd = new SqlCommand("update Users set Name_User=@name,LastName_User=@lastname,Email_User=@email,UserName=@username,Password_User=@password,type_User=@type " +
                         "where Id_User=@id", conn);
+
+                    //string PassEncry = encrypted.Encryting(users.Password_User);
 
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@name", users.Name_User);
                     cmd.Parameters.AddWithValue("@lastname", users.LastName_User);
                     cmd.Parameters.AddWithValue("@email", users.Email_User);
+                    cmd.Parameters.AddWithValue("@username", users.UserName);
                     cmd.Parameters.AddWithValue("@password", users.Password_User);
+                    cmd.Parameters.AddWithValue("@type", users.Type_User);
 
                     cmd.ExecuteNonQuery();
 

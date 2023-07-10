@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMS_API.Data;
 using PMS_API.Models;
 
 namespace PMS_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -30,7 +32,10 @@ namespace PMS_API.Controllers
             newUser.Name_User = users.Name_User;
             newUser.LastName_User = users.LastName_User;
             newUser.Email_User = users.Email_User;
+            newUser.UserName = users.UserName;
             newUser.Password_User = encryption.Encryting(users.Password_User);
+            newUser.Type_User = users.Type_User;
+            
 
             return UsersData.EditUser(id, newUser, Connection);
         }
