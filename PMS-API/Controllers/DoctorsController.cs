@@ -6,6 +6,7 @@ using PMS_API.Models;
 
 namespace PMS_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorsController : ControllerBase
@@ -24,11 +25,15 @@ namespace PMS_API.Controllers
         {
             return DoctorsData.AddDoctor(doctors, Connection);
         }
-        [Authorize]
         [HttpGet]
         public dynamic GetDoctors()
         {
             return DoctorsData.GetDoctos(Connection);
+        }
+        [HttpGet("{id}")]
+        public dynamic GetDoctorById(int id)
+        {
+            return DoctorsData.GetDoctorById(id, Connection);
         }
     }
 }

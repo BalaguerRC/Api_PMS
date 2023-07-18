@@ -77,5 +77,53 @@ namespace PMS_API.Data
                 };
             }
         }
+
+        public static dynamic GetDoctorById(int id, string connection)
+        {
+            using(conn=new SqlConnection(connection))
+            {
+                Doctors doctors = new Doctors();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select * from Doctors where Id_Doctors=@id", conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    SqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        doctors.Id_Doctor = reader2.GetInt32(0);
+                        doctors.Name_Doctor = reader2.GetString(1);
+                        doctors.LastName_Doctor = reader2.GetString(2);
+                        doctors.Email_Doctor = reader2.GetString(3);
+                        doctors.Phone_Doctor = reader2.GetString(4);
+                        doctors.Identity_Doctor = reader2.GetString(5);
+                        doctors.Img_Doctor = reader2.GetString(6);
+                        doctors.Date_Doctor = reader2.GetDateTime(7);
+                    }
+                    reader2.Close();
+                    reader2.Dispose();
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = doctors
+                    };
+                }
+
+                return new
+                {
+                    success = false,
+                    message = "User does not exist"
+                };
+            }
+        }
     }
 }
