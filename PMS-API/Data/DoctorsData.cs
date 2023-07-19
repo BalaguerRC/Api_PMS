@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using PMS_API.Models;
 
 namespace PMS_API.Data
@@ -35,6 +36,76 @@ namespace PMS_API.Data
                 conn.Close();
 
                 return true;
+            }
+        }
+        public static dynamic EditDoctor(int id, Doctors doctors, string connection)
+        {
+            using(conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("update Doctors set Name_Doctor=@name,LastName_Doctor=@lastname,Email_Doctor=@email,Phone_Doctor=@phone,Identity__Doctor=@identity,Img_Doctor=@img " +
+                        "where Id_Doctors=@id", conn);
+
+                    //string PassEncry = encrypted.Encryting(users.Password_User);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@name", doctors.Name_Doctor);
+                    cmd.Parameters.AddWithValue("@lastname", doctors.LastName_Doctor);
+                    cmd.Parameters.AddWithValue("@email", doctors.Email_Doctor);
+                    cmd.Parameters.AddWithValue("@phone", doctors.Phone_Doctor);
+                    cmd.Parameters.AddWithValue("@identity", doctors.Identity_Doctor);
+                    cmd.Parameters.AddWithValue("@img", doctors.Img_Doctor);
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        message = "Edited"
+                    };
+                }
+                catch (Exception)
+                {
+                    return new
+                    {
+                        message = "Error"
+                    };
+                }
+            }
+        }
+
+        public static dynamic DeleteDoctor(int id, string connection)
+        {
+            using(conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("delete Doctors where Id_Doctors=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return new
+                    {
+                        success = false,
+                        message = "Error"
+                    };
+                }
+                
             }
         }
         public static dynamic GetDoctos(string connection)

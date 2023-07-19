@@ -66,5 +66,47 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetLabTestById(int id,string connection)
+        {
+            using(conn = new SqlConnection(connection))
+            {
+                LabTest labTest = new LabTest();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select * from LabTest where Id_LabTest=@id", conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    SqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        labTest.Id_LabTest = reader2.GetInt32(0);
+                        labTest.Name_LabTest = reader2.GetString(1);
+                        labTest.Date_LabTest = reader2.GetDateTime(2);
+                    }
+                    reader2.Close();
+                    reader2.Dispose();
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = labTest
+                    };
+                }
+
+                return new
+                {
+                    success = false,
+                    message = "LabTest does not exist"
+                };
+            }
+        }
     }
 }

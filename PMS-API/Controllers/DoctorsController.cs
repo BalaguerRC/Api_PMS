@@ -35,5 +35,15 @@ namespace PMS_API.Controllers
         {
             return DoctorsData.GetDoctorById(id, Connection);
         }
+        [HttpPut("{id}")]
+        public dynamic EditUser([FromBody] Doctors dorctors, int id)
+        {
+            return DoctorsData.EditDoctor(id, dorctors, Connection);
+        }
+        [HttpDelete("{id}")]
+        public dynamic DeleteUser(int id)
+        {
+            return DoctorsData.DeleteDoctor(id, Connection);
+        }
     }
 }

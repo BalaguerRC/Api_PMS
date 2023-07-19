@@ -29,5 +29,10 @@ namespace PMS_API.Controllers
         {
             return LabTestData.GetLabTest(Connection);
         }
+        [HttpGet("{id}")]
+        public dynamic GetLabTestById(int id)
+        {
+            return LabTestData.GetLabTestById(id,Connection);
+        }
     }
 }
