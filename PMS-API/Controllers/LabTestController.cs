@@ -23,6 +23,11 @@ namespace PMS_API.Controllers
         {
             return LabTestData.AddLabTest(labTest, Connection);
         }
+        [HttpPut("{id}")]
+        public dynamic EditLabTest([FromBody] LabTest labTest, int id)
+        {
+            return LabTestData.EditLabTest(id, labTest, Connection);
+        }
 
         [HttpGet]
         public dynamic GetLabTest()
@@ -33,6 +38,11 @@ namespace PMS_API.Controllers
         public dynamic GetLabTestById(int id)
         {
             return LabTestData.GetLabTestById(id,Connection);
+        }
+        [HttpDelete("{id}")]
+        public dynamic DeleteLabTest(int id)
+        {
+            return LabTestData.DeleteLabTest(id,Connection);
         }
     }
 }

@@ -31,6 +31,63 @@ namespace PMS_API.Data
             }
         }
 
+        public static dynamic EditLabTest(int id,LabTest labTest,string connection)
+        {
+            using(conn = new SqlConnection(connection)) 
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("update LabTest set Name_LabTest=@name where Id_LabTest=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@name", labTest.Name_LabTest);
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+
+                    return new
+                    {
+                        success = false,
+                        message = "Error"
+                    };
+                }
+            }
+        }
+        public static dynamic DeleteLabTest(int id, string connection)
+        {
+            using(conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("delete LabTest where Id_LabTest=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return new
+                    {
+                        success = false,
+                        message = "Error"
+                    };
+                }
+            }
+        }
+
         public static dynamic GetLabTest(string connection) 
         {
             using(conn = new SqlConnection(connection))
