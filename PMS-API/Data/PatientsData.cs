@@ -30,7 +30,7 @@ namespace PMS_API.Data
                 cmd.Parameters.AddWithValue("@identity", patients.Identity_Patient);
                 cmd.Parameters.AddWithValue("@birthdate", patients.Birthdate_Patient);
                 cmd.Parameters.AddWithValue("@smoker", patients.Smoker_Patient);
-                cmd.Parameters.AddWithValue("@allergies", patients.Address_Patient);
+                cmd.Parameters.AddWithValue("@allergies", patients.Allergies_Patient);
                 cmd.Parameters.AddWithValue("@img", patients.Img_Patient);
 
                 cmd.ExecuteNonQuery();
@@ -79,6 +79,58 @@ namespace PMS_API.Data
                 {
                     success = true,
                     data = list
+                };
+            }
+        }
+        public static dynamic GetPatientById(int id,string connection)
+        {
+            using(conn=new SqlConnection(connection))
+            {
+                Patients patients = new Patients();
+
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select * from Patients where Id_Patient=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    SqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        patients.Id_Patient = reader2.GetInt32(0);
+                        patients.Name_Patient = reader2.GetString(1);
+                        patients.LastName_Patient = reader2.GetString(2);   
+                        patients.Phone_Patient = reader2.GetString(3);
+                        patients.Address_Patient = reader2.GetString(4);
+                        patients.Identity_Patient = reader2.GetString(5);
+                        patients.Birthdate_Patient = reader2.GetDateTime(6);
+                        patients.Smoker_Patient = reader2.GetInt32(7);
+                        patients.Allergies_Patient = reader2.GetString(8);
+                        patients.Img_Patient = reader2.GetString(9);
+                        patients.Date_Patient = reader2.GetDateTime(10);
+                    }
+                    reader2.Close();
+                    reader2.Dispose();
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = patients
+                    };
+                }
+
+                return new
+                {
+                    success = false,
+                    message = "Patient does not exist"
                 };
             }
         }

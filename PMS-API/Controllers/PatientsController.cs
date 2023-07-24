@@ -28,5 +28,10 @@ namespace PMS_API.Controllers
         {
             return PatientsData.GetPatients(Connection);
         }
+        [HttpGet("{id}")]
+        public dynamic GetPatientById(int id)
+        {
+            return PatientsData.GetPatientById(id,Connection);
+        }
     }
 }
