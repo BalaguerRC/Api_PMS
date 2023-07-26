@@ -40,6 +40,77 @@ namespace PMS_API.Data
                 return true;
             }
         }
+        public static dynamic EditPatient(int id,Patients patients,string connection) 
+        { 
+            using( conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("update Patients set Name_Patient=@name,LastName_Patient=@lastname,Phone_Patient=@phone,Address_Patient=@address,Identity_Patient=@identity,Birthdate_Patient=@birthdate,Smoker_Patient=@smoker,Allergies_Patient=@allergies,Img_Patient=@img " +
+                        "where Id_Patient=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@name", patients.Name_Patient);
+                    cmd.Parameters.AddWithValue("@lastname", patients.LastName_Patient);
+                    cmd.Parameters.AddWithValue("@phone", patients.Phone_Patient);
+                    cmd.Parameters.AddWithValue("@address", patients.Address_Patient);
+                    cmd.Parameters.AddWithValue("@identity", patients.Identity_Patient);
+                    cmd.Parameters.AddWithValue("@birthdate", patients.Birthdate_Patient);
+                    cmd.Parameters.AddWithValue("@smoker", patients.Smoker_Patient);
+                    cmd.Parameters.AddWithValue("@allergies", patients.Allergies_Patient);
+                    cmd.Parameters.AddWithValue("@img", patients.Img_Patient);
+                    cmd.Parameters.AddWithValue("@id", id);
+                   
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        message = "Edited"
+                    };
+                }
+                catch (Exception)
+                {
+                    return new
+                    {
+                        message = "Error"
+                    };
+                }
+            }
+        }
+        public static dynamic DeletePatient(int id, string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("delete Patients where Id_Patient=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+
+                    conn.Close();
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return new
+                    {
+                        success = false,
+                        message = "Error"
+                    };
+                }
+
+            }
+        }
         public static dynamic GetPatients(string connection)
         {
             using( conn = new SqlConnection(connection))

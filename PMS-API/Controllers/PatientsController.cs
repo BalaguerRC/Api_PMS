@@ -23,6 +23,16 @@ namespace PMS_API.Controllers
         {
             return PatientsData.AddPatient(patients, Connection);
         }
+        [HttpPut("{id}")]
+        public dynamic EditPatient([FromBody] Patients patients,int id)
+        {
+            return PatientsData.EditPatient(id, patients, Connection);
+        }
+        [HttpDelete("{id}")]
+        public dynamic DeletePatient(int id)
+        {
+            return PatientsData.DeletePatient(id,Connection);
+        }
         [HttpGet]
         public dynamic GetPatients()
         {
