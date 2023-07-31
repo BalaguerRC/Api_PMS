@@ -14,4 +14,11 @@
         public string Img_Patient { get; set; }
         public DateTime? Date_Patient { get; set; }
     }
+    public class Patients_MA
+    {
+        public int? Id_Patient { get; set; }
+        public string Name_Patient { get; set; }
+        public string LastName_Patient { get; set; }
+        public string Identity_Patient { get; set; }
+    }
 }

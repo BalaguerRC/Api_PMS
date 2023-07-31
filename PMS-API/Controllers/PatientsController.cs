@@ -43,5 +43,11 @@ namespace PMS_API.Controllers
         {
             return PatientsData.GetPatientById(id,Connection);
         }
+        [Route("getPInMA")]
+        [HttpGet]
+        public dynamic GetPatientsInMA()
+        {
+            return PatientsData.GetPatientsInMA(Connection);
+        }
     }
 }

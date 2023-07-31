@@ -45,5 +45,11 @@ namespace PMS_API.Controllers
         {
             return DoctorsData.DeleteDoctor(id, Connection);
         }
+        [Route("getDoctorsMA")]
+        [HttpGet]
+        public dynamic GetDoctorsInMA()
+        {
+            return DoctorsData.GetDoctosInMA(Connection);
+        }
     }
 }

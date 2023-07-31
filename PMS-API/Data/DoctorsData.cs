@@ -196,5 +196,41 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetDoctosInMA(string connection)
+        {
+
+            using (conn = new SqlConnection(connection))
+            {
+                List<Doctors_MA> list = new List<Doctors_MA>();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select Id_Doctors,Name_Doctor,LastName_Doctor,Identity__Doctor from Doctors", conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new Doctors_MA
+                    {
+                        Id_Doctor = reader.GetInt32(0),
+                        Name_Doctor = reader.GetString(1),
+                        LastName_Doctor = reader.GetString(2),
+                        Identity_Doctor = reader.GetString(3),
+                    });
+                }
+
+
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
     }
 }
