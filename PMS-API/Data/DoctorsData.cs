@@ -232,5 +232,51 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetDoctorInMAById(int id, string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+
+                Doctors_MA doctors = new Doctors_MA();
+
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select Id_Doctors,Name_Doctor,LastName_Doctor,Identity__Doctor from Doctors where Id_Doctors=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    SqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        doctors.Id_Doctor = reader2.GetInt32(0);
+                        doctors.Name_Doctor = reader2.GetString(1);
+                        doctors.LastName_Doctor = reader2.GetString(2);
+                        doctors.Identity_Doctor = reader2.GetString(3);
+                    }
+                    reader2.Close();
+                    reader2.Dispose();
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = doctors
+                    };
+                }
+
+                return new
+                {
+                    success = false,
+                    message = "Patient does not exist"
+                };
+            }
+        }
     }
 }

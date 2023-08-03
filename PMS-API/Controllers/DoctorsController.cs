@@ -52,4 +52,27 @@ namespace PMS_API.Controllers
             return DoctorsData.GetDoctosInMA(Connection);
         }
     }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DoctorsMAController : ControllerBase
+    {
+        private IConfiguration _configuration;
+        private string Connection;
+
+        public DoctorsMAController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            Connection = _configuration.GetConnectionString("Api_PMSContext");
+        }
+        [HttpGet]
+        public dynamic GetDoctorsInMA()
+        {
+            return DoctorsData.GetDoctosInMA(Connection);
+        }
+        [HttpGet("{id}")]
+        public dynamic GetDoctorsInMAById(int id)
+        {
+            return DoctorsData.GetDoctorInMAById(id,Connection);
+        }
+    }
 }
