@@ -20,12 +20,12 @@ namespace PMS_API.Data
                 conn.Open();
 
                 SqlCommand cmd = new SqlCommand("insert into MedicalAppointments(Id_Patient,Id_Doctors,Date_MA,Cause_MA,State_MA) " +
-                    "values(@idpatient,@iddoctor,GETDATE(),@cause,@state)", conn);
+                    "values(@idpatient,@iddoctor,@date,@cause,0)", conn);
 
                 cmd.Parameters.AddWithValue("@idpatient", medical.Id_Patient);
                 cmd.Parameters.AddWithValue("@iddoctor", medical.Id_Doctros);
                 cmd.Parameters.AddWithValue("@cause", medical.Cause_MA);
-                cmd.Parameters.AddWithValue("@state", medical.State_MA);
+                cmd.Parameters.AddWithValue("@date", medical.Date_MA);
 
                 cmd.ExecuteNonQuery();
 
@@ -67,6 +67,51 @@ namespace PMS_API.Data
                 {
                     success = true,
                     data = list
+                };
+            }
+        }
+        public static dynamic GetMAByID_LabTestResult(int id, string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+
+                MedicalAppointments_LabTestResult MALabTest=new MedicalAppointments_LabTestResult();
+
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select Id_MA,Id_Patient,Id_Doctors from MedicalAppointments where Id_MA=@id ", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    SqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+                        MALabTest.Id_MA= reader2.GetInt32(0);
+                        MALabTest.Id_Patient = reader2.GetInt32(1);
+                        MALabTest.Id_Doctros = reader2.GetInt32(2);
+                    }
+                    reader2.Close();
+                    reader2.Dispose();
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = MALabTest
+                    };
+                }
+
+                return new
+                {
+                    success = false,
+                    message = "MA does not exist"
                 };
             }
         }

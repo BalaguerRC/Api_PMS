@@ -27,5 +27,10 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.GetMedicalAppointments(Connection);
         }
+        [HttpGet("{id}")]
+        public dynamic GetMAById_LabTestResults(int id)
+        {
+            return MedicalAppointmentsData.GetMAByID_LabTestResult(id,Connection);
+        }
     }
 }

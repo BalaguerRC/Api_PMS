@@ -9,4 +9,10 @@
         public string Cause_MA { get; set; }
         public int State_MA { get; set; }
     }
+    public class MedicalAppointments_LabTestResult
+    {
+        public int? Id_MA { get; set; }
+        public int Id_Patient { get; set; }
+        public int Id_Doctros { get; set; }
+    }
 }
