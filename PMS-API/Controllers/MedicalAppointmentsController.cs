@@ -32,5 +32,10 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.GetMAByID_LabTestResult(id,Connection);
         }
+        [HttpPut("{id}")]
+        public dynamic MA_PendingConsultation(int id)
+        {
+            return MedicalAppointmentsData.MedicalAppointment_PendingConsultation(id, Connection);
+        }
     }
 }

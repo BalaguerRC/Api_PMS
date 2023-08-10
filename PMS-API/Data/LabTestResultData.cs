@@ -28,7 +28,7 @@ namespace PMS_API.Data
                 cmd.Parameters.AddWithValue("@testResult", "test");
                 cmd.Parameters.AddWithValue("@state", 0);
 
-                cmd.BeginExecuteNonQuery();
+                cmd.ExecuteNonQuery();
 
                 conn.Close();
 
@@ -61,6 +61,41 @@ namespace PMS_API.Data
                         Date_TestResult = reader.GetDateTime(7),
                     });
                 }
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
+        public static dynamic GetLabTestResultsByPatient(int id, string connection)
+        {
+            using(conn= new SqlConnection(connection))
+            {
+                List<LabTestResultsByPatient> list = new List<LabTestResultsByPatient>();
+                
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select Id_Patient,State_Result from LabTestResult where Id_Patient=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new LabTestResultsByPatient
+                    {
+                        Id_Patient = reader.GetInt32(0),
+                        State_Result = reader.GetInt32(1)
+                    });
+                }
+
                 reader.Close();
                 reader.Dispose();
 

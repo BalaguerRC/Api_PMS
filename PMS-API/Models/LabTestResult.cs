@@ -13,4 +13,9 @@
 
 
     }
+    public class LabTestResultsByPatient
+    {
+        public int Id_Patient { get; set; }
+        public int State_Result { get; set; }
+    }
 }
