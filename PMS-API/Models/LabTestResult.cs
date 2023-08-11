@@ -15,7 +15,13 @@
     }
     public class LabTestResultsByPatient
     {
+        public int? Id_LabTestResult { get; set; }
+
         public int Id_Patient { get; set; }
+        public int Id_LabTest { get; set; }
+
         public int State_Result { get; set; }
+        public int Id_MedicalAppointment { get; set; }
+
     }
 }

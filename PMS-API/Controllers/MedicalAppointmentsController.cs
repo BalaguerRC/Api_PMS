@@ -37,5 +37,29 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.MedicalAppointment_PendingConsultation(id, Connection);
         }
+        /*[Route("pendingResults")]
+        [HttpPut("{id}")]
+        public dynamic MA_PendingResults(int id)
+        {
+            return MedicalAppointmentsData.MedicalAppointment_PendingResults(id, Connection);
+        }*/
     }
+    [Route("api/[controller]/pendingResults")]
+    [ApiController]
+    public class MedicalAppointmentController : ControllerBase
+    {
+        private IConfiguration Configuration;
+        private string Connection;
+        public MedicalAppointmentController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            Connection = Configuration.GetConnectionString("Api_PMSContext");
+        }
+        [HttpPut("{id}")]
+        public dynamic MA_PendingResults(int id)
+        {
+            return MedicalAppointmentsData.MedicalAppointment_PendingResults(id, Connection);
+        }
+    }
+
 }

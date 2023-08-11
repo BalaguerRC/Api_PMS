@@ -32,5 +32,10 @@ namespace PMS_API.Controllers
         {
             return LabTestResultData.GetLabTestResultsByPatient(id,Connection);
         }
+        [HttpPut("{id}")]
+        public dynamic LabTestResult_PendingResults(int id)
+        {
+            return LabTestResultData.LabTestResult_PendingResults(id, Connection);
+        }
     }
 }

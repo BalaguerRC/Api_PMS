@@ -143,5 +143,33 @@ namespace PMS_API.Data
                 return false;
             }
         }
+
+        public static dynamic MedicalAppointment_PendingResults(int id, string connection)
+        {
+            using(conn = new SqlConnection(connection))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("update MedicalAppointments set State_MA=2 where Id_MA=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    conn.Close();
+
+                    return true;
+
+                }
+                conn.Close();
+
+                return false;
+            }
+        }
     }
 }

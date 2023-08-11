@@ -81,7 +81,7 @@ namespace PMS_API.Data
                 
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("select Id_Patient,State_Result from LabTestResult where Id_Patient=@id", conn);
+                SqlCommand cmd = new SqlCommand("select Id_LabTestResult,Id_Patient,Id_LabTest,State_Result,Id_MedicalAppointment from LabTestResult where Id_Patient=@id", conn);
 
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -91,8 +91,11 @@ namespace PMS_API.Data
                 {
                     list.Add(new LabTestResultsByPatient
                     {
-                        Id_Patient = reader.GetInt32(0),
-                        State_Result = reader.GetInt32(1)
+                        Id_LabTestResult = reader.GetInt32(0),
+                        Id_Patient = reader.GetInt32(1),
+                        Id_LabTest = reader.GetInt32(2),
+                        State_Result = reader.GetInt32(3),
+                        Id_MedicalAppointment = reader.GetInt32(4),
                     });
                 }
 
@@ -106,6 +109,33 @@ namespace PMS_API.Data
                     success = true,
                     data = list
                 };
+            }
+        }
+        public static dynamic LabTestResult_PendingResults(int id, string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("update LabTestResult set State_Result=1 where Id_LabTestResult=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    reader.Dispose();
+
+                    conn.Close();
+
+                    return true;
+
+                }
+                conn.Close();
+
+                return false;
             }
         }
     }
