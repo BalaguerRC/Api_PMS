@@ -39,26 +39,30 @@ namespace PMS_API.Data
         {
             using(conn = new SqlConnection(connection))
             {
-                List<LabTestResult> list = new List<LabTestResult>();
+                List<LabTestResultGet> list = new List<LabTestResultGet>();
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("select * from LabTestResult", conn);
+                SqlCommand cmd = new SqlCommand("select lr.Id_LabTestResult, lr.Id_Patient, p.Name_Patient,lr.Id_MedicalAppointment,l.Name_LabTest,d.Name_Doctor,lr.Test_Result,lr.State_Result,lr.Date_TestResult from LabTestResult lr " +
+                    "inner join Patients p on lr.Id_Patient=p.Id_Patient " +
+                    "inner join LabTest l on lr.Id_LabTest=l.Id_LabTest " +
+                    "inner join Doctors d on lr.Id_Doctor = d.Id_Doctors ", conn);
 
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    list.Add(new LabTestResult
+                    list.Add(new LabTestResultGet
                     {
-                        Id_LabTestResult= reader.GetInt32(0),
-                        Id_Patient= reader.GetInt32(1),
-                        Id_MedicalAppointment= reader.GetInt32(2),
-                        Id_LabTest = reader.GetInt32(3),
-                        Id_Doctor = reader.GetInt32(4),
-                        Test_Result = reader.GetString(5),
-                        State_Result = reader.GetInt32(6),
-                        Date_TestResult = reader.GetDateTime(7),
+                        Id_LabTestResult = reader.GetInt32(0),
+                        Id_Patient = reader.GetInt32(1),
+                        Patient = reader.GetString(2),
+                        Id_MedicalAppointment = reader.GetInt32(3),
+                        LabTest = reader.GetString(4),
+                        Doctor = reader.GetString(5),
+                        Test_Result = reader.GetString(6),
+                        State_Result = reader.GetInt32(7),
+                        Date_TestResult = reader.GetDateTime(8),
                     });
                 }
                 reader.Close();
@@ -81,7 +85,10 @@ namespace PMS_API.Data
                 
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("select Id_LabTestResult,Id_Patient,Id_LabTest,State_Result,Id_MedicalAppointment from LabTestResult where Id_Patient=@id", conn);
+                SqlCommand cmd = new SqlCommand("select lt.Id_LabTestResult,lt.Id_Patient,p.Name_Patient,l.Name_LabTest,lt.State_Result,lt.Id_MedicalAppointment from LabTestResult lt " +
+                    "inner join Patients p on lt.Id_Patient=p.Id_Patient " +
+                    "inner join LabTest l on lt.Id_LabTest=l.Id_LabTest " +
+                    "where lt.Id_Patient=@id", conn);
 
                 cmd.Parameters.AddWithValue("@id", id);
 
@@ -93,9 +100,10 @@ namespace PMS_API.Data
                     {
                         Id_LabTestResult = reader.GetInt32(0),
                         Id_Patient = reader.GetInt32(1),
-                        Id_LabTest = reader.GetInt32(2),
-                        State_Result = reader.GetInt32(3),
-                        Id_MedicalAppointment = reader.GetInt32(4),
+                        Patient= reader.GetString(2),
+                        LabTest = reader.GetString(3),
+                        State_Result = reader.GetInt32(4),
+                        Id_MedicalAppointment = reader.GetInt32(5),
                     });
                 }
 
@@ -111,6 +119,56 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetAllLabTestResultsByPatient(int id, string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                List<LabTestResultGet> list = new List<LabTestResultGet>();
+
+                conn.Open();
+
+                //SqlCommand cmd = new SqlCommand("select * from LabTestResult where Id_Patient=@id", conn);
+                SqlCommand cmd = new SqlCommand("select lr.Id_LabTestResult, lr.Id_Patient, p.Name_Patient,lr.Id_MedicalAppointment,l.Name_LabTest,d.Name_Doctor,lr.Test_Result,lr.State_Result,lr.Date_TestResult from LabTestResult lr " +
+                    "inner join Patients p on lr.Id_Patient=p.Id_Patient " +
+                    "inner join LabTest l on lr.Id_LabTest=l.Id_LabTest " +
+                    "inner join Doctors d on lr.Id_Doctor = d.Id_Doctors " +
+                    "where lr.Id_Patient=@id", conn);
+
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new LabTestResultGet
+                    {
+                        Id_LabTestResult = reader.GetInt32(0),
+                        Id_Patient = reader.GetInt32(1),
+                        Patient = reader.GetString(2),
+                        Id_MedicalAppointment = reader.GetInt32(3),
+                        LabTest = reader.GetString(4),
+                        Doctor = reader.GetString(5),
+                        Test_Result= reader.GetString(6),
+                        State_Result = reader.GetInt32(7),
+                        Date_TestResult = reader.GetDateTime(8),
+                        
+                    });
+                }
+
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
+
+
         public static dynamic LabTestResult_PendingResults(int id, string connection)
         {
             using (conn = new SqlConnection(connection))

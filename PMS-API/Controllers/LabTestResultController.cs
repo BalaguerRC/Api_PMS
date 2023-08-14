@@ -38,4 +38,22 @@ namespace PMS_API.Controllers
             return LabTestResultData.LabTestResult_PendingResults(id, Connection);
         }
     }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LabTestResultsController
+    {
+        private IConfiguration _configuration;
+        private string Connection;
+
+        public LabTestResultsController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            Connection = _configuration.GetConnectionString("Api_PMSContext");
+        }
+        [HttpGet("{id}")]
+        public dynamic GetAllLabTestResultByPatient(int id)
+        {
+            return LabTestResultData.GetAllLabTestResultsByPatient(id, Connection);
+        }
+    }
 }
