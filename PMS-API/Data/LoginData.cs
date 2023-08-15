@@ -24,7 +24,7 @@ namespace PMS_API.Data
             {
                 conn.Open();
 
-                SqlCommand cmd = new SqlCommand("select Id_User,Name_User,LastName_User,Email_User,UserName,Password_User from Users" +
+                SqlCommand cmd = new SqlCommand("select Id_User,Name_User,LastName_User,Email_User,UserName,Password_User,type_User from Users" +
                     " where UserName=@user", conn);
 
                 cmd.Parameters.AddWithValue("user", login.UserName);
@@ -43,6 +43,7 @@ namespace PMS_API.Data
                     users.Email_User = tb.Rows[0]["Email_User"].ToString();
                     users.UserName = tb.Rows[0]["UserName"].ToString();
                     users.Password_User = tb.Rows[0]["Password_User"].ToString();
+                    users.Type_User = Convert.ToInt32(tb.Rows[0]["type_User"].ToString());
 
                     string descPass = encryption.DesEncryting(users.Password_User);
 
@@ -63,7 +64,8 @@ namespace PMS_API.Data
                                 Name= users.Name_User,
                                 LastName= users.LastName_User,
                                 Email= users.Email_User,
-                                UserName=users.UserName
+                                UserName=users.UserName,
+                                Type= users.Type_User
                             },
                             token=token
                         };
