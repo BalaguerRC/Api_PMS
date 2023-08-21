@@ -25,6 +25,12 @@ namespace PMS_API.Controllers
         {
             return DoctorsData.AddDoctor(doctors, Connection);
         }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetDoctorByNameOrIdentity([FromBody] DoctorByName doctor)
+        {
+            return DoctorsData.GetDoctorByNamerOrIdentity(doctor.Name_Doctor, Connection);
+        }
         [HttpGet]
         public dynamic GetDoctors()
         {

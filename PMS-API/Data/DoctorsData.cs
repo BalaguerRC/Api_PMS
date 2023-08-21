@@ -148,6 +148,47 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetDoctorByNamerOrIdentity(string name,string connection)
+        {
+
+            using (conn = new SqlConnection(connection))
+            {
+                List<Doctors> list = new List<Doctors>();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select * from Doctors where Name_Doctor=@name or Identity__Doctor=@name", conn);
+                cmd.Parameters.AddWithValue("@name", name);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new Doctors
+                    {
+                        Id_Doctor = reader.GetInt32(0),
+                        Name_Doctor = reader.GetString(1),
+                        LastName_Doctor = reader.GetString(2),
+                        Email_Doctor = reader.GetString(3),
+                        Phone_Doctor = reader.GetString(4),
+                        Identity_Doctor = reader.GetString(5),
+                        Img_Doctor = reader.GetString(6),
+                        Date_Doctor = reader.GetDateTime(7),
+                    });
+                }
+
+
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
 
         public static dynamic GetDoctorById(int id, string connection)
         {

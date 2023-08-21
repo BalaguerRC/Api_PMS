@@ -18,4 +18,8 @@
         public string LastName_Doctor { get; set; }
         public string Identity_Doctor { get; set; }
     }
+    public class DoctorByName
+    {
+        public string Name_Doctor { get; set; }
+    }
 }
