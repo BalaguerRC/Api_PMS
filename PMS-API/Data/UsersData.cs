@@ -182,7 +182,43 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetUserByName(string name,string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                conn.Open();
+                List<Users> users = new List<Users>();
+                SqlCommand cmd = new SqlCommand("Select * from Users where Name_User=@name or UserName=@name", conn);
 
+                cmd.Parameters.AddWithValue("name", name);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    users.Add(new Users
+                    {
+                        Id_User = reader.GetInt32(0),
+                        Name_User = reader.GetString(1),
+                        LastName_User = reader.GetString(2),
+                        Email_User = reader.GetString(3),
+                        UserName = reader.GetString(4),
+                        Password_User = reader.GetString(5),
+                        Date_User = reader.GetDateTime(6),
+                        Type_User = reader.GetInt32(7),
+                    });
+                }
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+                return new
+                {
+                    success = true,
+                    data = users
+                };
+            }
+        }
         public static dynamic GetUserById(int id, string connection) 
         {
             using(conn= new SqlConnection(connection))

@@ -31,4 +31,9 @@
 
         public DateTime? Date_User { get; set; }
     }
+    public class UserByName
+    {
+        public string Name_User { get; set; }
+
+    }
 }

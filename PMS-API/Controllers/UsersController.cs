@@ -49,10 +49,17 @@ namespace PMS_API.Controllers
         {
             return UsersData.GetUsers(Connection);
         }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetUserByName([FromBody] UserByName name)
+        {
+            return UsersData.GetUserByName(name.Name_User, Connection);
+        }
         [HttpGet("{id}")]
         public dynamic GetUsersById(int id) 
         { 
             return UsersData.GetUserById(id, Connection);
         }
     }
+    
 }

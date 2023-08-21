@@ -83,7 +83,8 @@ namespace PMS_API.Data
                                 }*/
                 return new
                 {
-                    success = false
+                    success = false,
+                    message = "Username or password incorrect"
                 };
             }
         }
