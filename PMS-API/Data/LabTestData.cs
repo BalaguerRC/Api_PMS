@@ -123,6 +123,42 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetLabTestByName(string name,string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                List<LabTest> list = new List<LabTest>();
+
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select * from LabTest where Name_LabTest=@name", conn);
+                cmd.Parameters.AddWithValue("@name", name);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new LabTest
+                    {
+                        Id_LabTest = reader.GetInt32(0),
+                        Name_LabTest = reader.GetString(1),
+                        Date_LabTest = reader.GetDateTime(2),
+                    });
+                }
+
+                reader.Close();
+
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
         public static dynamic GetLabTestById(int id,string connection)
         {
             using(conn = new SqlConnection(connection))

@@ -23,6 +23,12 @@ namespace PMS_API.Controllers
         {
             return LabTestData.AddLabTest(labTest, Connection);
         }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetLabTestByName([FromBody] LabTestByName labTest)
+        {
+            return LabTestData.GetLabTestByName(labTest.Name_LabTest, Connection);
+        }
         [HttpPut("{id}")]
         public dynamic EditLabTest([FromBody] LabTest labTest, int id)
         {

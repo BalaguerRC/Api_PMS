@@ -6,4 +6,8 @@
         public string Name_LabTest { get; set; }
         public DateTime? Date_LabTest { get; set; }
     }
+    public class LabTestByName
+    {
+        public string Name_LabTest { get; set; }
+    }
 }
