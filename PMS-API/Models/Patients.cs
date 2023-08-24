@@ -21,4 +21,8 @@
         public string LastName_Patient { get; set; }
         public string Identity_Patient { get; set; }
     }
+    public class PatientsByNameOrIdenetity
+    {
+        public string Name_Patient { get; set; }
+    }
 }

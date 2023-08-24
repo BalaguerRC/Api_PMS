@@ -23,6 +23,12 @@ namespace PMS_API.Controllers
         {
             return PatientsData.AddPatient(patients, Connection);
         }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetPatientByNameOrIdentity([FromBody] PatientsByNameOrIdenetity patients)
+        {
+            return PatientsData.GetPatientsByNameOrIdentity(patients.Name_Patient, Connection);
+        }
         [HttpPut("{id}")]
         public dynamic EditPatient([FromBody] Patients patients, int id)
         {
