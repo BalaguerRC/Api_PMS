@@ -9,6 +9,10 @@
         public string Cause_MA { get; set; }
         public int State_MA { get; set; }
     }
+    public class MedicalAppointmentsByName
+    {
+        public string PatientOrDoctor { get; set; }
+    }
     public class MedicalAppointmentsGet
     {
         public int? Id_MA { get; set; }

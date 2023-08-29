@@ -74,6 +74,48 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetMedicalAppointmentsByPatientOrDoctor(string name,string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                List<MedicalAppointmentsGet> list = new List<MedicalAppointmentsGet>();
+                conn.Open();
+
+                //SqlCommand cmd = new SqlCommand("select * from MedicalAppointments", conn);
+                SqlCommand cmd = new SqlCommand("select ma.Id_MA,ma.Id_Patient,p.Name_Patient,d.Name_Doctor, ma.Date_MA, ma.Cause_MA, ma.State_MA from MedicalAppointments ma " +
+                    "inner join Patients p on ma.Id_Patient=p.Id_Patient " +
+                    "inner join Doctors d on ma.Id_Doctors = d.Id_Doctors " +
+                    "where p.Name_Patient=@name or d.Name_Doctor=@name", conn);
+
+                cmd.Parameters.AddWithValue("@name", name);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new MedicalAppointmentsGet
+                    {
+                        Id_MA = reader.GetInt32(0),
+                        Id_Patient = reader.GetInt32(1),
+                        Patient = reader.GetString(2),
+                        Doctor = reader.GetString(3),
+                        Date_MA = reader.GetDateTime(4),
+                        Cause_MA = reader.GetString(5),
+                        State_MA = reader.GetInt32(6),
+                    });
+                }
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
         public static dynamic GetMAByID_LabTestResult(int id, string connection)
         {
             using (conn = new SqlConnection(connection))

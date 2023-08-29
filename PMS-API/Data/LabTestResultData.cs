@@ -181,6 +181,8 @@ namespace PMS_API.Data
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
+                //corregir
+
                 if (reader.Read())
                 {
                     reader.Close();

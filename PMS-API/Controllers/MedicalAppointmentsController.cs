@@ -22,6 +22,12 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.AddMedicalAppointment(medical, Connection);
         }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetMAByPatientOrDoctor([FromBody] MedicalAppointmentsByName medical)
+        {
+            return MedicalAppointmentsData.GetMedicalAppointmentsByPatientOrDoctor(medical.PatientOrDoctor, Connection);
+        }
         [HttpGet]
         public dynamic GetMedicalAppointments()
         {
