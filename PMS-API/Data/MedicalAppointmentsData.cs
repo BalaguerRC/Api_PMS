@@ -166,27 +166,26 @@ namespace PMS_API.Data
         {
             using(conn = new SqlConnection(connection))
             {
-                conn.Open();
-
-                SqlCommand cmd = new SqlCommand("update MedicalAppointments set State_MA=1 where Id_MA=@id", conn);
-
-                cmd.Parameters.AddWithValue("@id", id);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (reader.Read())
+                try
                 {
-                    reader.Close();
-                    reader.Dispose();
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("update MedicalAppointments set State_MA=1 where Id_MA=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
 
                     conn.Close();
 
                     return true;
-
                 }
-                conn.Close();
+                catch (Exception)
+                {
 
-                return false;
+                    return false;
+                }
+                
             }
         }
 

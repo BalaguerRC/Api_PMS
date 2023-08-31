@@ -173,29 +173,25 @@ namespace PMS_API.Data
         {
             using (conn = new SqlConnection(connection))
             {
-                conn.Open();
-
-                SqlCommand cmd = new SqlCommand("update LabTestResult set State_Result=1 where Id_LabTestResult=@id", conn);
-
-                cmd.Parameters.AddWithValue("@id", id);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                //corregir
-
-                if (reader.Read())
+                try
                 {
-                    reader.Close();
-                    reader.Dispose();
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("update LabTestResult set State_Result=1 where Id_LabTestResult=@id", conn);
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
 
                     conn.Close();
 
                     return true;
-
                 }
-                conn.Close();
-
-                return false;
+                catch (Exception)
+                {
+                    return false;
+                }
+                
             }
         }
     }
