@@ -216,5 +216,57 @@ namespace PMS_API.Data
                 return false;
             }
         }
+
+        public static dynamic MedicalAppointment_Dashboard(string connection)
+        {
+            /*
+              create view vwDashboard AS
+  SELECT
+	(select COUNT(State_MA) from dbo.[MedicalAppointments] where State_MA=0) Pending_Consultation,
+	(select COUNT(State_MA) from dbo.[MedicalAppointments] where State_MA=1) Pending_Results,
+	(select COUNT(State_MA) from dbo.[MedicalAppointments] where State_MA=2) Results;
+  go
+
+  select * from vwDashboard
+             */
+            using (conn = new SqlConnection(connection))
+            {
+                try
+                {
+                    List<MedicalAppointments_Dashboard> list = new List<MedicalAppointments_Dashboard>();
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("select * from vwDashboard", conn);
+
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while(reader.Read())
+                    {
+                        list.Add(new MedicalAppointments_Dashboard
+                        {
+                            Pending_Consultation = reader.GetInt32(0),
+                            Pending_Results = reader.GetInt32(1),
+                            Results = reader.GetInt32(2),
+                        });
+                    }
+                    reader.Close();
+                    reader.Dispose();
+
+                    conn.Close();
+
+                    return new
+                    {
+                        success = true,
+                        data = list
+                    };
+                }
+                catch (Exception)
+                {
+
+                    return false;
+                }
+            }
+        }
     }
 }

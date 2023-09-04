@@ -33,6 +33,12 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.GetMedicalAppointments(Connection);
         }
+        [Route("dashboard")]
+        [HttpGet]
+        public dynamic GetMADashboard()
+        {
+            return MedicalAppointmentsData.MedicalAppointment_Dashboard(Connection);
+        }
         [HttpGet("{id}")]
         public dynamic GetMAById_LabTestResults(int id)
         {

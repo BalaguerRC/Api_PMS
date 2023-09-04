@@ -329,5 +329,7 @@ namespace PMS_API.Data
                 };
             }
         }
+
+        //select TOP 4 Name_Patient,LastName_Patient,Img_Patient from Patients order by Date_Patient desc
     }
 }

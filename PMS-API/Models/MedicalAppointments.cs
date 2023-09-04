@@ -29,4 +29,10 @@
         public int Id_Patient { get; set; }
         public int Id_Doctros { get; set; }
     }
+    public class MedicalAppointments_Dashboard
+    {
+        public int Pending_Consultation { get; set; }
+        public int Pending_Results { get; set; }
+        public int Results { get; set; }
+    }
 }
