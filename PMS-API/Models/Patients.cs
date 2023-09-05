@@ -25,4 +25,10 @@
     {
         public string Name_Patient { get; set; }
     }
+    public class Top4Patients
+    {
+        public string Name_Patient { get; set; }
+        public string LastName_Patient { get; set; }
+        public string Img_Patient { get; set; }
+    }
 }

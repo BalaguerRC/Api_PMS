@@ -331,5 +331,39 @@ namespace PMS_API.Data
         }
 
         //select TOP 4 Name_Patient,LastName_Patient,Img_Patient from Patients order by Date_Patient desc
+        public static dynamic GetTop4Patients(string connection) 
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                List<Top4Patients> list = new List<Top4Patients>();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select TOP 4 Name_Patient,LastName_Patient,Img_Patient from Patients order by Date_Patient desc", conn);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new Top4Patients
+                    {
+                        Name_Patient = reader.GetString(0),
+                        LastName_Patient = reader.GetString(1),
+                        Img_Patient = reader.GetString(2),
+                    });
+                }
+
+                reader.Close();
+
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
     }
 }

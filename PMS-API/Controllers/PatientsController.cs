@@ -44,6 +44,12 @@ namespace PMS_API.Controllers
         {
             return PatientsData.GetPatients(Connection);
         }
+        [Route("top4")]
+        [HttpGet]
+        public dynamic GetTop4Patients()
+        {
+            return PatientsData.GetTop4Patients(Connection);
+        }
         [HttpGet("{id}")]
         public dynamic GetPatientById(int id)
         {
