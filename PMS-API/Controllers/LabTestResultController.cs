@@ -27,6 +27,7 @@ namespace PMS_API.Controllers
         {
             return LabTestResultData.GetLabTestResults(Connection);
         }
+        
         [HttpGet("{id}")]
         public dynamic GetLabTestResultByPatient(int id)
         {
@@ -54,6 +55,12 @@ namespace PMS_API.Controllers
         public dynamic GetAllLabTestResultByPatient(int id)
         {
             return LabTestResultData.GetAllLabTestResultsByPatient(id, Connection);
+        }
+        [Route("byName")]
+        [HttpPost]
+        public dynamic GetLabTestResult([FromBody] LabTestResultByPatientOrDoctor labTestResult)
+        {
+            return LabTestResultData.GetLabTestResultsByPatientOrDoctor(labTestResult.Name, Connection);
         }
     }
 }

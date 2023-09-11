@@ -35,4 +35,8 @@
         public int Id_MedicalAppointment { get; set; }
 
     }
+    public class LabTestResultByPatientOrDoctor
+    {
+        public string Name { get; set; }
+    }
 }

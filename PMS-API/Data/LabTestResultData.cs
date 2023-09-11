@@ -77,6 +77,51 @@ namespace PMS_API.Data
                 };
             }
         }
+        public static dynamic GetLabTestResultsByPatientOrDoctor(string name,string connection)
+        {
+            using (conn = new SqlConnection(connection))
+            {
+                List<LabTestResultGet> list = new List<LabTestResultGet>();
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand("select lr.Id_LabTestResult, lr.Id_Patient, p.Name_Patient,lr.Id_MedicalAppointment,l.Name_LabTest,d.Name_Doctor,lr.Test_Result,lr.State_Result,lr.Date_TestResult from LabTestResult lr " +
+                    "inner join Patients p on lr.Id_Patient=p.Id_Patient " +
+                    "inner join LabTest l on lr.Id_LabTest=l.Id_LabTest " +
+                    "inner join Doctors d on lr.Id_Doctor = d.Id_Doctors where p.Name_Patient=@name or d.Name_Doctor=@name", conn);
+
+                cmd.Parameters.AddWithValue("@name", name);
+
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new LabTestResultGet
+                    {
+                        Id_LabTestResult = reader.GetInt32(0),
+                        Id_Patient = reader.GetInt32(1),
+                        Patient = reader.GetString(2),
+                        Id_MedicalAppointment = reader.GetInt32(3),
+                        LabTest = reader.GetString(4),
+                        Doctor = reader.GetString(5),
+                        Test_Result = reader.GetString(6),
+                        State_Result = reader.GetInt32(7),
+                        Date_TestResult = reader.GetDateTime(8),
+                    });
+                }
+                reader.Close();
+                reader.Dispose();
+
+                conn.Close();
+
+                return new
+                {
+                    success = true,
+                    data = list
+                };
+            }
+        }
+
         public static dynamic GetLabTestResultsByPatient(int id, string connection)
         {
             using(conn= new SqlConnection(connection))
