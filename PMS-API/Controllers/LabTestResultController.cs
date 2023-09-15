@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PMS_API.Data;
 using PMS_API.Models;
 
 namespace PMS_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LabTestResultController
@@ -39,6 +41,7 @@ namespace PMS_API.Controllers
             return LabTestResultData.LabTestResult_PendingResults(id, Connection);
         }
     }
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LabTestResultsController

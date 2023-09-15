@@ -58,6 +58,7 @@ namespace PMS_API.Controllers
             return DoctorsData.GetDoctosInMA(Connection);
         }
     }
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorsMAController : ControllerBase

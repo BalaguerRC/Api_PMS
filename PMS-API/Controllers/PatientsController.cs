@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMS_API.Data;
 using PMS_API.Models;
 
 namespace PMS_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsController : ControllerBase
@@ -44,12 +46,7 @@ namespace PMS_API.Controllers
         {
             return PatientsData.GetPatients(Connection);
         }
-        [Route("top4")]
-        [HttpGet]
-        public dynamic GetTop4Patients()
-        {
-            return PatientsData.GetTop4Patients(Connection);
-        }
+       
         [HttpGet("{id}")]
         public dynamic GetPatientById(int id)
         {
@@ -68,6 +65,7 @@ namespace PMS_API.Controllers
             return PatientsData.GetPatientsInMAById(id,Connection);
         }*/
     }
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsMaController : ControllerBase
@@ -89,6 +87,24 @@ namespace PMS_API.Controllers
         public dynamic GetPatientsInMAById(int id)
         {
             return PatientsData.GetPatientsInMAById(id,Connection);
+        }
+    }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PatientsTop4Controller : ControllerBase
+    {
+        private IConfiguration _configuration;
+        private string Connection;
+
+        public PatientsTop4Controller(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            Connection = _configuration.GetConnectionString("Api_PMSContext");
+        }
+        [HttpGet]
+        public dynamic GetTop4Patients()
+        {
+            return PatientsData.GetTop4Patients(Connection);
         }
     }
 }

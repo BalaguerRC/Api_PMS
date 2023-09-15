@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMS_API.Data;
 using PMS_API.Models;
 
 namespace PMS_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicalAppointmentsController : ControllerBase
@@ -33,12 +35,7 @@ namespace PMS_API.Controllers
         {
             return MedicalAppointmentsData.GetMedicalAppointments(Connection);
         }
-        [Route("dashboard")]
-        [HttpGet]
-        public dynamic GetMADashboard()
-        {
-            return MedicalAppointmentsData.MedicalAppointment_Dashboard(Connection);
-        }
+        
         [HttpGet("{id}")]
         public dynamic GetMAById_LabTestResults(int id)
         {
@@ -56,6 +53,7 @@ namespace PMS_API.Controllers
             return MedicalAppointmentsData.MedicalAppointment_PendingResults(id, Connection);
         }*/
     }
+    [Authorize]
     [Route("api/[controller]/pendingResults")]
     [ApiController]
     public class MedicalAppointmentController : ControllerBase
@@ -71,6 +69,23 @@ namespace PMS_API.Controllers
         public dynamic MA_PendingResults(int id)
         {
             return MedicalAppointmentsData.MedicalAppointment_PendingResults(id, Connection);
+        }
+    }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MedicalAppointmentGraphController : ControllerBase
+    {
+        private IConfiguration Configuration;
+        private string Connection;
+        public MedicalAppointmentGraphController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            Connection = Configuration.GetConnectionString("Api_PMSContext");
+        }
+        [HttpGet]
+        public dynamic GetMADashboard()
+        {
+            return MedicalAppointmentsData.MedicalAppointment_Dashboard(Connection);
         }
     }
 
